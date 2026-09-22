@@ -1,3 +1,10 @@
+import json
+
+print("Assignment: Python + Git Network Automation Case")
+
+with open('secret.json', 'r') as json_file:
+    ourjson = json.load (json_file)
+
 network_inventory = [
     {
     "hostname": "RTR-CORE-01",
@@ -91,3 +98,13 @@ network_inventory = [
 
 print("=== NETWORK OPERATIONAL REPORT ===")
 print(f"Total devices monitored:{len(network_inventory)}")
+
+print("\n--- DEVICE STATUS SUMMARY---")
+for device in network_inventory:
+    status_indicator = "OK" if device["status"] == "operational" else "NOK"
+    print(f"{status_indicator} {device['hostname']:15} | {device['device_type']:8} | {device['location']:12} | CPU: {device['cpu_usage']:5}%")
+
+print("\n--- DEVICES NEEDING ATTENTION ---")
+for device in network_inventory:
+    if device["cpu_usage"] > 60 or device["memory_usage"] > 80 or device["backup_status"] == "failed" or device["status"] == "warning" or device["uptime_days"] < 10:
+        print(f" Check {device['hostname']}: CPU {device['cpu_usage']}%")
